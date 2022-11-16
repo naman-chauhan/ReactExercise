@@ -1,58 +1,8 @@
 import React, { useState } from "react";
 import "./styles.css";
-import { Button, Card, Form } from "react-bootstrap";
-
-function Todo({ todo, index, markTodo, removeTodo, editTodo }) {
-  return (
-    <div className="todo">
-      <span style={{ textDecoration: todo.isDone ? "line-through" : "" }}>
-        {todo.text}
-      </span>
-      <div>
-        <Button variant="outline-success" onClick={() => markTodo(index)}>
-          ✓
-        </Button>{" "}
-        <Button variant="outline-warning" onClick={() => editTodo(index)}>
-          ✎
-        </Button>{" "}
-        <Button variant="outline-danger" onClick={() => removeTodo(index)}>
-          ✕
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function FormTodo({ addTodo, todoEdit }) {
-  const [value, setValue] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!value) return;
-    addTodo(value);
-    setValue("");
-  };
-
-  return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group>
-        <Form.Label>
-          <b>Add Todo</b>
-        </Form.Label>
-        <Form.Control
-          type="text"
-          className="input"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Add new todo"
-        />
-      </Form.Group>
-      <Button variant="primary mb-3" type="submit">
-        Submit
-      </Button>
-    </Form>
-  );
-}
+import { Card } from "react-bootstrap";
+import FormTodo from "./components/FormTodo";
+import Todo from "./components/Todo";
 
 function App() {
   const [todos, setTodos] = useState([
@@ -80,8 +30,18 @@ function App() {
   const editTodo = (index) => {
     const newTodos = [...todos];
     const taskEdit = newTodos[index].text;
-    setTodoEdit(taskEdit);
-    console.log(taskEdit);
+    setTodoEdit({ edit: taskEdit, id: index });
+    // todos[index].text = taskEdit;
+    setTodos((currVal) => {
+      // [...currVal], currVal[index].text = taskEdit;
+      const newState = currVal.map((obj, index) => {
+        if (obj.id === index) {
+          obj.text = taskEdit;
+        }
+        return obj;
+      });
+      return newState;
+    });
   };
 
   const removeTodo = (index) => {
@@ -95,7 +55,7 @@ function App() {
     <div className="app">
       <div className="container">
         <h1 className="text-center mb-4">Todo List</h1>
-        <FormTodo addTodo={addTodo} todoEdit={todoEdit} />
+        <FormTodo addTodo={addTodo} todoEdit={todoEdit} editTodo={editTodo} />
         <div>
           {todos.map((todo, index) => (
             <Card>
