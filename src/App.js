@@ -1,81 +1,67 @@
-import React, { useState } from "react";
-import "./styles.css";
-import { Card } from "react-bootstrap";
-import FormTodo from "./components/FormTodo";
-import Todo from "./components/Todo";
+import React, { useState, useEffect } from "react";
 
-function App() {
-  const [todos, setTodos] = useState([
-    {
-      text: "This is a sampe todo",
-      isDone: false,
-    },
-  ]);
+const App = () => {
+  const [posts, setPosts] = useState([]);
 
-  const [todoEdit, setTodoEdit] = useState("");
+  // json data of array of objects
 
-  const addTodo = (text) => {
-    const newTodos = [...todos, { text }];
-    setTodos(newTodos);
-    console.log(newTodos);
-  };
-
-  const markTodo = (index) => {
-    const newTodos = [...todos];
-    newTodos[index].isDone = true;
-    setTodos(newTodos);
-    console.log(newTodos);
-  };
-
-  const editTodo = (index) => {
-    const newTodos = [...todos];
-    const taskEdit = newTodos[index].text;
-    setTodoEdit({ edit: taskEdit, id: index });
-    // todos[index].text = taskEdit;
-    setTodos((currVal) => {
-      // [...currVal], currVal[index].text = taskEdit;
-      const newState = currVal.map((obj, index) => {
-        if (obj.id === index) {
-          obj.text = taskEdit;
-        }
-        return obj;
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Json Data : ", data);
+        setPosts(data);
+      })
+      .catch((err) => {
+        console.log(err.message);
       });
-      return newState;
-    });
-  };
+  }, []);
 
-  const removeTodo = (index) => {
-    const newTodos = [...todos];
-    newTodos.splice(index, 1);
-    setTodos(newTodos);
-    console.log(newTodos);
-  };
+  // [ [user1], [user2], [user3] ]
+
+  const apiList = posts.reduce((r, a) => {
+    console.log("r", r);
+    console.log("a", a);
+    r[a.userId] = r[a.userId] || [];
+    r[a.userId].push(a);
+    return r;
+  }, []);
+
+  console.log("grouped data", apiList);
+
+  const listItems = apiList.map((e1, index) => {
+    return (
+      <div style={{ border: "1px solid", margin: "20px" }}>
+        <ul type="none">
+          <li
+            style={{
+              fontWeight: "bold",
+              color: "red",
+            }}
+          >
+            <span className="display-4">User id : {index}</span>
+          </li>
+        </ul>
+        {e1.map((e2) => {
+          return (
+            <div>
+              <ul>
+                <li>Id : {e2.id}</li>
+                <li>Title : {e2.title}</li>
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+    );
+  });
 
   return (
-    <div className="app">
-      <div className="container">
-        <h1 className="text-center mb-4">Todo List</h1>
-        <FormTodo addTodo={addTodo} todoEdit={todoEdit} editTodo={editTodo} />
-        <div>
-          {todos.map((todo, index) => (
-            <Card>
-              <Card.Body>
-                <Todo
-                  key={index}
-                  index={index}
-                  todo={todo}
-                  markTodo={markTodo}
-                  removeTodo={removeTodo}
-                  editTodo={editTodo}
-                  todoEdit={todoEdit}
-                />
-              </Card.Body>
-            </Card>
-          ))}
-        </div>
-      </div>
+    <div>
+      <h1 className="display-1 text-center">Todo Api call</h1>
+      <p>{listItems}</p>
     </div>
   );
-}
+};
 
 export default App;
