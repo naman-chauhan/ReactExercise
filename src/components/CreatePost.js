@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./HomePage.css";
 import "./CreatePost.css";
 import { useNavigate } from "react-router-dom";
-import { Col, Row, Container, Card, Form } from "react-bootstrap-v5";
+import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
 
 const CreatePost = ({ post, index, addPosts }) => {
     const nav = useNavigate();
@@ -56,6 +56,18 @@ const CreatePost = ({ post, index, addPosts }) => {
                                                 onChange={handleInputChange}
                                             />
                                         </Form.Group>
+                                        <div className="container mt-3">
+                                            <div className="row">
+                                                <div className="col">
+                                                    <Button
+                                                        className="btn btn-primary text-white fw-bolder btn-block"
+                                                        type="submit"
+                                                    >
+                                                        POST
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </Form>
                                 </div>
                                 <div className="container mt-3 position-sticky">
@@ -67,18 +79,6 @@ const CreatePost = ({ post, index, addPosts }) => {
                                         <div className="col btn border border-primary border-3">
                                             <i class="fa fa-camera fa-3x p-2 text-primary" aria-hidden="true"></i>
                                             <p className="text-primary">Camera</p>
-                                        </div>
-                                    </div>
-                                    <div className="container mt-3">
-                                        <div className="row">
-                                            <div className="col">
-                                                <h1
-                                                    className="btn btn-primary text-white fw-bolder btn-block"
-                                                    onClick={addPosts}
-                                                >
-                                                    POST
-                                                </h1>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

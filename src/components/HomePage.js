@@ -10,7 +10,6 @@ const HomePage = ({ post, index, addPosts }) => {
     const createPost = () => {
         nav("/create");
     };
-
     return (
         <div>
             <Container>
