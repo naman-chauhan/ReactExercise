@@ -1,12 +1,12 @@
 import React from "react";
 import PostItem from "./postItem";
-const Post = ({ post, index, addPosts }) => {
-    return (
-        <div>
-            <PostItem />
-            <PostItem />
-        </div>
-    );
+const Post = ({post}) => {
+  return (
+
+    <div>
+      <PostItem title={post} />
+    </div>
+  );
 };
 
 export default Post;
