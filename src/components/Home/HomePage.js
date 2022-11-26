@@ -1,6 +1,6 @@
 import React from "react";
 import "./HomePage.css";
-import Post from "./Post";
+import Post from "../Post/Post";
 
 import { useNavigate } from "react-router-dom";
 import { Col, Row, Container, Card, Form } from "react-bootstrap-v5";
@@ -21,7 +21,7 @@ const HomePage = () => {
               <Card.Body>
                 <div className="card sticky-top border-left-4 border-primary">
                   <h2 className="display-4">
-                    Tech <sub className="display-2 text-primary">X</sub>
+                    Tech <sub className="display-2 text-primary bold">X</sub>
                   </h2>
                   <div className="mb-3">
                     <Form>
@@ -44,7 +44,7 @@ const HomePage = () => {
 
                 <div className="mt-3">
                   {posts.map((post, index) => (
-                    <Post post={post} />
+                    <Post post={post} index={index} />
                   ))}
                 </div>
 

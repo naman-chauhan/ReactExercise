@@ -1,7 +1,20 @@
 import React from "react";
 import "./CreatePost.css";
-const PostItem = ({ title }) => {
+const PostItem = ({ title, indexdel }) => {
   var local = JSON.parse(localStorage.getItem("response") || "");
+
+  // function deletePost(indexdel) {
+  //   // var post = JSON.parse(localStorage.getItem("posts"));
+  //   // let i = post.length;
+  //   // while (i-- > 0) {
+  //   //   let key = localStorage.key(i);
+  //   //   if (localStorage.getItem(key) === indexdel) {
+  //   //     localStorage.removeItem(key);
+  //   //   }
+  //   // }
+  //   // console.log("i", i);
+  //   console.log("indexdel", indexdel);
+  // }
   console.log(title);
   return (
     <div>
@@ -28,11 +41,7 @@ const PostItem = ({ title }) => {
             <div className="p-2">
               <p className="text-justify">{title.title}.</p>
             </div>
-            <img
-              src="https://i.imgur.com/xhzhaGA.jpg"
-              alt="img"
-              className="img-fluid"
-            />
+            <img src={title.filevalue} alt="img" height="auto" width="100" />
             <hr />
             <div className="d-flex justify-content-between align-items-center">
               <div className="border-right-2">

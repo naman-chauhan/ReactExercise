@@ -1,10 +1,9 @@
 import React from "react";
 import PostItem from "./postItem";
-const Post = ({post}) => {
+const Post = ({ post, index }) => {
   return (
-
     <div>
-      <PostItem title={post} />
+      <PostItem title={post} indexdel={index} />
     </div>
   );
 };

@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 
-import HomePage from "./components/HomePage";
-import CreatePost from "./components/CreatePost";
-import Auth from "./components/Auth";
+import HomePage from "./components/Home/HomePage";
+import CreatePost from "./components/Post/CreatePost";
+import Auth from "./components/Auth/Auth";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>

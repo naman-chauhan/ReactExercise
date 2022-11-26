@@ -1,0 +1,39 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+.create-post{
+    height:2vh;
+    padding: 10px 0 400px 0;
+    border:none;
+}
+.create-post:active{
+    border:none;
+}
+textarea {
+    resize: none;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden
+}
+
+border-remove{
+    outline: none;
+}
+.scroll::-webkit-scrollbar {
+    display: none;
+}
+
+
+textarea:hover,
+input:hover,
+textarea:active,
+input:active,
+textarea:focus,
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active {
+    outline: 0px !important;
+    box-shadow: none !important;
+}

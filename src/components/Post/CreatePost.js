@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./HomePage.css";
+import "../HomePage.css";
 import "./CreatePost.css";
 import { useNavigate } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
@@ -7,6 +7,7 @@ import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
 const CreatePost = () => {
   const nav = useNavigate();
   const [value, setValue] = useState("");
+  const [filevalue, setFileValue] = useState("");
   const redirectHandler = () => {
     nav("/home");
   };
@@ -21,7 +22,7 @@ const CreatePost = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!value) return;
-    addPosts(value);
+    addPosts(value, filevalue);
     setValue("");
     // console.log(posts);
   };
@@ -31,15 +32,19 @@ const CreatePost = () => {
   };
 
   const uploadHandler = (e) => {
-    console.log("the selected file is : ", e);
+    const fr = new FileReader();
+    fr.onloadend = () => setFileValue(fr.result);
+    fr.readAsDataURL(e.target.files[0]);
+    setFileValue(e.target.value);
+    console.log(e.target.files[0]);
   };
 
-  const addPosts = (title) => {
+  const addPosts = (title, filevalue) => {
     if (JSON.parse(localStorage.getItem("posts")) === null) {
-      localStorage.setItem("posts", JSON.stringify([{ title }]));
+      localStorage.setItem("posts", JSON.stringify([{ title, filevalue }]));
     } else {
       const oldPost = JSON.parse(localStorage.getItem("posts"));
-      const newPosts = [...oldPost, { title }];
+      const newPosts = [...oldPost, { title, filevalue }];
       localStorage.setItem("posts", JSON.stringify(newPosts));
     }
     nav("/home");
@@ -48,9 +53,9 @@ const CreatePost = () => {
 
   return (
     <div>
-      <Container>
+      <Container className="vh-100">
         <Row className="vh-100 d-flex justify-content-center align-items-center">
-          <Col md={8} lg={6} xs={12} className="p-4">
+          <Col md={8} lg={6} xs={12} className="p-4 vh-100">
             <Card>
               <Card.Body>
                 <div className="card sticky-top border-left-4 border-primary">
@@ -76,11 +81,13 @@ const CreatePost = () => {
                   <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formBasicEmail">
                       <Form.Control
-                        type="text"
                         placeholder="What's on your mind?"
-                        className="create-post"
+                        className="create-post border-remove scroll"
                         value={value}
+                        as="textarea"
+                        rows={3}
                         onChange={handleInputChange}
+                        onFocus={{}}
                       />
                     </Form.Group>
 
@@ -90,7 +97,6 @@ const CreatePost = () => {
                           <Form.Control
                             className="col border border-primary border-3"
                             type="file"
-                            multiple
                             onChange={uploadHandler}
                           />
                         </Form.Group>
