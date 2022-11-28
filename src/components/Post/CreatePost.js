@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../HomePage.css";
+import "../Home/HomePage.css";
 import "./CreatePost.css";
 import { useNavigate } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
@@ -35,12 +35,11 @@ const CreatePost = () => {
     const fr = new FileReader();
     fr.onloadend = () => setFileValue(fr.result);
     fr.readAsDataURL(e.target.files[0]);
-    setFileValue(e.target.value);
     console.log(e.target.files[0]);
   };
 
   const addPosts = (title, filevalue) => {
-    if (JSON.parse(localStorage.getItem("posts")) === null) {
+    if (localStorage.getItem("posts") === undefined) {
       localStorage.setItem("posts", JSON.stringify([{ title, filevalue }]));
     } else {
       const oldPost = JSON.parse(localStorage.getItem("posts"));
@@ -85,29 +84,47 @@ const CreatePost = () => {
                         className="create-post border-remove scroll"
                         value={value}
                         as="textarea"
-                        rows={3}
+                        rows={2}
                         onChange={handleInputChange}
-                        onFocus={{}}
                       />
                     </Form.Group>
 
                     <div className="container mt-3 position-sticky">
                       <div className="row sticky-bottom">
-                        <Form.Group>
+                        <Form.Group className="col-md-6 btn p-1">
+                          <label
+                            for="file-upload"
+                            class="h-100 w-100 fa fa-image fa-2x custom-file-upload btn text-primary  border border-primary border-3 rounded font-weight-bold"
+                          >
+                            <br />
+                            <br />
+                            Photo/Video
+                          </label>
                           <Form.Control
-                            className="col border border-primary border-3"
+                            id="file-upload"
+                            className="col btn"
                             type="file"
                             onChange={uploadHandler}
                           />
                         </Form.Group>
-
-                        <div className="col btn border border-primary border-3">
-                          <i
-                            class="fa fa-camera fa-3x p-2 text-primary"
-                            aria-hidden="true"
-                          ></i>
-                          <p className="text-primary">Camera</p>
-                        </div>
+                        <Form.Group className="col-md-6 btn p-1">
+                          <label
+                            for="file-upload"
+                            class="h-100 w-100 fa fa-camera fa-2x custom-file-upload btn text-primary  border border-primary border-3 rounded"
+                          >
+                            <br />
+                            <br />
+                            Camera
+                          </label>
+                          <Form.Control
+                            id="file-upload"
+                            className="col btn border border-danger border-3 "
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                            onChange={uploadHandler}
+                          />
+                        </Form.Group>
                       </div>
                     </div>
 

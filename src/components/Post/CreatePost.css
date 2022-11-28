@@ -1,8 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 .create-post{
-    height:2vh;
-    padding: 10px 0 400px 0;
+    padding: 1rem 0 20rem 0;
     border:none;
 }
 .create-post:active{
@@ -36,4 +35,17 @@ label:focus,
 .btn.active {
     outline: 0px !important;
     box-shadow: none !important;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    font-size: 1.5em;
+    display: inline-block;
+    padding: 20px 5px;
+    cursor: pointer;
+    box-shadow: none;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./HomePage.css";
 import Post from "../Post/Post";
 
@@ -7,8 +7,25 @@ import { Col, Row, Container, Card, Form } from "react-bootstrap-v5";
 
 const HomePage = () => {
   const nav = useNavigate();
-  var posts = JSON.parse(localStorage.getItem("posts"));
-  console.log(posts);
+
+  const [postdata, setPostData] = useState();
+
+  var init = JSON.parse(localStorage.getItem("posts"));
+  if (init === null) {
+    localStorage.setItem(
+      "posts",
+      JSON.stringify([
+        {
+          title: "!!..Create Your Post First..!!",
+          filevalue:
+            "https://www.ncenet.com/wp-content/uploads/2020/04/no-image-png-2.png",
+        },
+      ])
+    );
+  }
+
+  setPostData(JSON.parse(localStorage.getItem("posts")));
+
   const createPost = () => {
     nav("/create");
   };
@@ -43,8 +60,8 @@ const HomePage = () => {
                 </div>
 
                 <div className="mt-3">
-                  {posts.map((post, index) => (
-                    <Post post={post} index={index} />
+                  {postdata.map((post, index) => (
+                    <Post post={post} index={index} setPostData={setPostData} />
                   ))}
                 </div>
 

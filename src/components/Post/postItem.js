@@ -1,21 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import "./CreatePost.css";
-const PostItem = ({ title, indexdel }) => {
+const PostItem = ({ title, indexdel, setPostDataItem }) => {
   var local = JSON.parse(localStorage.getItem("response") || "");
 
-  // function deletePost(indexdel) {
-  //   // var post = JSON.parse(localStorage.getItem("posts"));
-  //   // let i = post.length;
-  //   // while (i-- > 0) {
-  //   //   let key = localStorage.key(i);
-  //   //   if (localStorage.getItem(key) === indexdel) {
-  //   //     localStorage.removeItem(key);
-  //   //   }
-  //   // }
-  //   // console.log("i", i);
-  //   console.log("indexdel", indexdel);
-  // }
-  console.log(title);
+  // useEffect(() => {
+  //   const items = JSON.parse(localStorage.getItem("posts"));
+  //   if (items) {
+  //     setPosts(items);
+  //   }
+  // }, []);
+
+  function deletePost() {
+    setPostDataItem((posts) => {
+      const c = [...posts];
+      return c.splice(indexdel, 1);
+    });
+
+    console.log("indexdel : ", indexdel);
+  }
+
   return (
     <div>
       <div className="container-fluid pd-5">
@@ -35,7 +38,7 @@ const PostItem = ({ title, indexdel }) => {
                 </div>
               </div>
               <div className="d-flex flex-row mt-1 ellipsis">
-                <i className="fa fa-ellipsis-h"></i>
+                <i className="fa fa-ellipsis-h" onClick={deletePost}></i>
               </div>
             </div>
             <div className="p-2">
