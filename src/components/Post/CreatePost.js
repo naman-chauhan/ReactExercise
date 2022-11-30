@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../HomePage.css";
+import "../Home/HomePage.css";
 import "./CreatePost.css";
 import { useNavigate } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
