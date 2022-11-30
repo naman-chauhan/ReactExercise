@@ -61,7 +61,7 @@ const CreatePost = () => {
                   <div className="row">
                     <div className="col-6 col-sm-6">
                       <h2 className="text-primary font-weight-bold float-start">
-                        Create Post
+                        Edit Post
                       </h2>
                     </div>
                     <div className="col-6 col-sm-6">
@@ -84,7 +84,6 @@ const CreatePost = () => {
                         className="create-post border-remove scroll"
                         value={value}
                         as="textarea"
-                        autoFocus
                         rows={2}
                         onChange={handleInputChange}
                       />
@@ -94,7 +93,7 @@ const CreatePost = () => {
                       <div className="row sticky-bottom">
                         <Form.Group className="col-md-6 btn p-1">
                           <label
-                            htmlFor="file-upload"
+                            for="file-upload"
                             class="h-100 w-100 fa fa-image fa-2x custom-file-upload btn text-primary  border border-primary border-3 rounded font-weight-bold"
                           >
                             <br />
@@ -110,7 +109,7 @@ const CreatePost = () => {
                         </Form.Group>
                         <Form.Group className="col-md-6 btn p-1">
                           <label
-                            htmlFor="file-upload"
+                            for="file-upload"
                             class="h-100 w-100 fa fa-camera fa-2x custom-file-upload btn text-primary  border border-primary border-3 rounded"
                           >
                             <br />

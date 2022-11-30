@@ -1,21 +1,24 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-.create-post{
+
+.create-post {
     padding: 1rem 0 20rem 0;
-    border:none;
+    border: none;
 }
-.create-post:active{
-    border:none;
+
+.create-post:active {
+    border: none;
 }
+
 textarea {
     resize: none;
     font-family: 'Montserrat', sans-serif;
     overflow: hidden
 }
 
-border-remove{
+border-remove {
     outline: none;
 }
+
 .scroll::-webkit-scrollbar {
     display: none;
 }
