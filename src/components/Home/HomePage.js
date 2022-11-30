@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./HomePage.css";
 import Post from "../Post/Post";
 
@@ -10,21 +10,30 @@ const HomePage = () => {
 
   const [postdata, setPostData] = useState();
 
-  var init = JSON.parse(localStorage.getItem("posts"));
-  if (init === null) {
-    localStorage.setItem(
-      "posts",
-      JSON.stringify([
-        {
-          title: "!!..Create Your Post First..!!",
-          filevalue:
-            "https://www.ncenet.com/wp-content/uploads/2020/04/no-image-png-2.png",
-        },
-      ])
-    );
-  }
+  useEffect(() => {
+    if (localStorage.getItem("posts") === null) {
+      localStorage.setItem(
+        "posts",
+        JSON.stringify([
+          {
+            title: "!!..Create Your Post First..!!",
+            filevalue:
+              "https://www.ncenet.com/wp-content/uploads/2020/04/no-image-png-2.png",
+          },
+        ])
+      );
+    }
+  }, []);
 
-  setPostData(JSON.parse(localStorage.getItem("posts")));
+  const updatedPosts = useCallback(() => {
+    setPostData(() => {
+      return JSON.parse(localStorage.getItem("posts"));
+    });
+  }, []);
+
+  useEffect(() => {
+    updatedPosts();
+  }, [updatedPosts]);
 
   const createPost = () => {
     nav("/create");

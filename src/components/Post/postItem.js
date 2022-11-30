@@ -1,23 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./CreatePost.css";
+import { Button } from "react-bootstrap-v5";
 const PostItem = ({ title, indexdel, setPostDataItem }) => {
   var local = JSON.parse(localStorage.getItem("response") || "");
-
+  const nav = useNavigate();
   // useEffect(() => {
-  //   const items = JSON.parse(localStorage.getItem("posts"));
-  //   if (items) {
-  //     setPosts(items);
-  //   }
+
   // }, []);
 
-  function deletePost() {
-    setPostDataItem((posts) => {
-      const c = [...posts];
-      return c.splice(indexdel, 1);
-    });
-
+  function deletePost(e) {
+    const items = JSON.parse(localStorage.getItem("posts"));
+    const deletedPost = [...items];
     console.log("indexdel : ", indexdel);
+    console.log("deletedPost : ", deletedPost);
+    deletedPost.splice(indexdel, 1);
+    setPostDataItem(() => {
+      console.log("deleted item : ", deletedPost);
+      localStorage.setItem("posts", JSON.stringify(deletedPost));
+    });
   }
+  const editPost = () => {
+    nav("/edit");
+  };
 
   return (
     <div>
@@ -38,7 +43,13 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
                 </div>
               </div>
               <div className="d-flex flex-row mt-1 ellipsis">
-                <i className="fa fa-ellipsis-h" onClick={deletePost}></i>
+                <Button onClick={deletePost} className="bg-danger">
+                  <i className="fa fa-trash fa-2x"></i>
+                </Button>
+                &nbsp;
+                <Button onClick={editPost} className="bg-primary ">
+                  <i className="fa fa-edit fa-2x"></i>
+                </Button>
               </div>
             </div>
             <div className="p-2">
