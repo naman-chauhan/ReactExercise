@@ -8,9 +8,8 @@ const EditPost = (props) => {
   const nav = useNavigate();
   const [value, setValue] = useState("");
   const [filevalue, setFileValue] = useState("");
-
-  // const index = useLocation();
-  const { indexx } = (props.location && props.location.state) || {};
+  const location = useLocation();
+  const index = location.state.id;
 
   const redirectHandler = () => {
     nav("/home");
@@ -19,16 +18,17 @@ const EditPost = (props) => {
   //   const [posts, setPosts] = useState([{}]);
 
   useEffect(() => {
-    console.log("inside edit page");
-    console.log("index del : ", indexx);
+    const oldPost = JSON.parse(localStorage.getItem("posts"));
+    setValue(oldPost[index].title);
+    setFileValue(oldPost[index].filevalue);
   }, []);
 
-  console.log("index out : ", indexx);
+  console.log("index out : ", index);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!value) return;
-    addPosts(value, filevalue);
+    EditPost(value, filevalue);
     setValue("");
     // console.log(posts);
   };
@@ -44,18 +44,15 @@ const EditPost = (props) => {
     console.log(e.target.files[0]);
   };
 
-  const addPosts = (title, filevalue) => {
-    if (localStorage.getItem("posts") === null) {
-      localStorage.setItem("posts", JSON.stringify([{ title, filevalue }]));
-    } else {
-      const oldPost = JSON.parse(localStorage.getItem("posts"));
-      const newPosts = [...oldPost, { title, filevalue }];
-      localStorage.setItem("posts", JSON.stringify(newPosts));
-      console.log("old and new post here ", oldPost, newPosts);
-    }
+  const EditPost = (updatedTitle, updatedFileValue) => {
+    const oldPost = JSON.parse(localStorage.getItem("posts"));
+    oldPost[index].title = updatedTitle;
+    oldPost[index].filevalue = updatedFileValue;
+    const newPost = [...oldPost];
+    localStorage.setItem("posts", JSON.stringify(newPost));
+    // console.log("old and new post here ", oldPost, newPosts);
     nav("/home");
   };
-
   return (
     <div>
       <Container className="vh-100">
@@ -94,6 +91,22 @@ const EditPost = (props) => {
                         onChange={handleInputChange}
                       />
                     </Form.Group>
+
+                    <div className="container mt-3 position-sticky">
+                      <div className="row sticky-bottom">
+                        <div className="col-md-6 border border-primary p-1">
+                          <img
+                            src={filevalue}
+                            alt="noimage"
+                            height={50}
+                            width={50}
+                          />
+                          &nbsp;&nbsp;
+                          <h3 className="d-inline">Media 1</h3>&nbsp;&nbsp;
+                          <i className="fa fa-trash fa-2x text-danger"></i>
+                        </div>
+                      </div>
+                    </div>
 
                     <div className="container mt-3 position-sticky">
                       <div className="row sticky-bottom">
@@ -156,5 +169,4 @@ const EditPost = (props) => {
     </div>
   );
 };
-
 export default EditPost;
