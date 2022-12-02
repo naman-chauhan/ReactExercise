@@ -14,8 +14,6 @@ function App() {
         <Route path="/" element={<Auth />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/create" element={<CreatePost />} />
-      </Routes>
-      <Routes>
         <Route path="/edit" element={<EditPost />} />
       </Routes>
     </BrowserRouter>
