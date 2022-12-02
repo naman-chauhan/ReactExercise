@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// import { useIsFocused } from "@react-navigation/native";
 import "./HomePage.css";
 import Post from "../Post/Post";
 
@@ -7,7 +8,7 @@ import { Col, Row, Container, Card, Form } from "react-bootstrap-v5";
 
 const HomePage = () => {
   const nav = useNavigate();
-
+  // const isFocused = useIsFocused();
   const [postdata, setPostData] = useState([{}]);
 
   useEffect(() => {
@@ -25,11 +26,12 @@ const HomePage = () => {
     }
   }, []);
 
+  //fetching data from localstorage
   useEffect(() => {
     setPostData(() => {
       return JSON.parse(localStorage.getItem("posts"));
     });
-  }, [postdata]);
+  }, []);
 
   console.log("postdata", postdata);
 

@@ -4,7 +4,7 @@ import "./CreatePost.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
 
-const EditPost = (props) => {
+const EditPost = () => {
   const nav = useNavigate();
   const [value, setValue] = useState("");
   const [filevalue, setFileValue] = useState("");
@@ -19,8 +19,12 @@ const EditPost = (props) => {
 
   useEffect(() => {
     const oldPost = JSON.parse(localStorage.getItem("posts"));
-    setValue(oldPost[index].title);
-    setFileValue(oldPost[index].filevalue);
+    setValue(() => {
+      return oldPost[index].title;
+    });
+    setFileValue(() => {
+      return oldPost[index].filevalue;
+    });
   }, []);
 
   console.log("index out : ", index);

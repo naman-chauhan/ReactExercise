@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./CreatePost.css";
 import { Button } from "react-bootstrap-v5";
-import EditPost from "../Post/EditPost";
 
 const PostItem = ({ title, indexdel, setPostDataItem }) => {
   var local = JSON.parse(localStorage.getItem("response") || "");
@@ -16,25 +15,15 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
     const deletedPost = [...items];
     console.log("deletedPost : ", deletedPost);
     deletedPost.splice(indexdel, 1);
+    localStorage.setItem("posts", JSON.stringify(deletedPost));
     setPostDataItem(() => {
-      console.log("deleted item : ", deletedPost);
-      localStorage.setItem("posts", JSON.stringify(deletedPost));
+      return JSON.parse(localStorage.getItem("posts"));
     });
   }
 
   const editPost = () => {
-    // const items = JSON.parse(localStorage.getItem("posts"));
-    // const editedPost = [...items];
-    // if (localStorage.getItem("posts") === null) {
-    //   localStorage.setItem("posts", JSON.stringify([{ title }]));
-    // } else {
-    //   const oldPost = JSON.parse(localStorage.getItem("posts"));
-    //   const newPosts = [...oldPost, { title }];
-    //   localStorage.setItem("posts", JSON.stringify(newPosts));
-    //   console.log("old and new post here ", oldPost, newPosts);
-    // }
     nav("/edit", { state: { id: indexdel } });
-    console.log("indexdel : ", indexdel);
+    console.log("index in postItem : ", indexdel);
   };
 
   return (
