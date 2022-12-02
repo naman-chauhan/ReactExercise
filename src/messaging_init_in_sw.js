@@ -14,6 +14,7 @@ const firebaseConfig = {
 function requestPermission() {
   console.log("Requesting permission...");
   Notification.requestPermission().then((permission) => {
+    console.log("permission: ", permission);
     if (permission === "granted") {
       console.log("Notification permission granted.");
       const app = initializeApp(firebaseConfig);
@@ -24,6 +25,7 @@ function requestPermission() {
         vapidKey:
           "BIeGkcSUx9UEO5WlT32VBa9fCkJ1Jnl8fwz-mJNT5XU8D4bvWKwP-TZsoiejqoqhYYEfephbBWsg8nK0P1QlPao",
       }).then((currentToken) => {
+        console.log("currentToken: ", currentToken);
         if (currentToken) {
           console.log("currentToken: ", currentToken);
         } else {

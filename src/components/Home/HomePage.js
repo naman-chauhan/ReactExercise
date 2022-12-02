@@ -29,7 +29,7 @@ const HomePage = () => {
     setPostData(() => {
       return JSON.parse(localStorage.getItem("posts"));
     });
-  }, []);
+  }, [postdata]);
 
   console.log("postdata", postdata);
 

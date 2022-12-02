@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./CreatePost.css";
 import { Button } from "react-bootstrap-v5";
 import EditPost from "../Post/EditPost";
@@ -33,6 +33,7 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
     //   localStorage.setItem("posts", JSON.stringify(newPosts));
     //   console.log("old and new post here ", oldPost, newPosts);
     // }
+    nav("/edit", { state: { id: indexdel } });
     console.log("indexdel : ", indexdel);
   };
 
@@ -59,15 +60,9 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
                   <i className="fa fa-trash fa-2x"></i>
                 </Button>
                 &nbsp;
-                <Link
-                  className="btn btn-primary"
-                  to={{
-                    pathname: "/edit",
-                    state: indexdel,
-                  }}
-                >
+                <Button className="bg-primary" onClick={editPost}>
                   <i className="fa fa-edit fa-2x"></i>
-                </Link>
+                </Button>
               </div>
             </div>
             <div className="p-2">
