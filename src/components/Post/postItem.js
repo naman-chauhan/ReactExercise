@@ -1,7 +1,9 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./CreatePost.css";
 import { Button } from "react-bootstrap-v5";
+import EditPost from "../Post/EditPost";
+
 const PostItem = ({ title, indexdel, setPostDataItem }) => {
   var local = JSON.parse(localStorage.getItem("response") || "");
   const nav = useNavigate();
@@ -12,7 +14,6 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
   function deletePost(e) {
     const items = JSON.parse(localStorage.getItem("posts"));
     const deletedPost = [...items];
-    console.log("indexdel : ", indexdel);
     console.log("deletedPost : ", deletedPost);
     deletedPost.splice(indexdel, 1);
     setPostDataItem(() => {
@@ -20,8 +21,19 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
       localStorage.setItem("posts", JSON.stringify(deletedPost));
     });
   }
+
   const editPost = () => {
-    nav("/edit");
+    // const items = JSON.parse(localStorage.getItem("posts"));
+    // const editedPost = [...items];
+    // if (localStorage.getItem("posts") === null) {
+    //   localStorage.setItem("posts", JSON.stringify([{ title }]));
+    // } else {
+    //   const oldPost = JSON.parse(localStorage.getItem("posts"));
+    //   const newPosts = [...oldPost, { title }];
+    //   localStorage.setItem("posts", JSON.stringify(newPosts));
+    //   console.log("old and new post here ", oldPost, newPosts);
+    // }
+    console.log("indexdel : ", indexdel);
   };
 
   return (
@@ -47,9 +59,15 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
                   <i className="fa fa-trash fa-2x"></i>
                 </Button>
                 &nbsp;
-                <Button onClick={editPost} className="bg-primary ">
+                <Link
+                  className="btn btn-primary"
+                  to={{
+                    pathname: "/edit",
+                    state: indexdel,
+                  }}
+                >
                   <i className="fa fa-edit fa-2x"></i>
-                </Button>
+                </Link>
               </div>
             </div>
             <div className="p-2">

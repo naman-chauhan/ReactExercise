@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../Home/HomePage.css";
 import "./CreatePost.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
 
-const CreatePost = () => {
+const EditPost = (props) => {
   const nav = useNavigate();
   const [value, setValue] = useState("");
   const [filevalue, setFileValue] = useState("");
+
+  // const index = useLocation();
+  const { indexx } = (props.location && props.location.state) || {};
+
   const redirectHandler = () => {
     nav("/home");
   };
 
   //   const [posts, setPosts] = useState([{}]);
 
-  //   useEffect(() => {
-  //     localStorage.setItem("posts", JSON.stringify(posts));
-  //     console.log("new note call:", posts);
-  //   }, [posts]);
+  useEffect(() => {
+    console.log("inside edit page");
+    console.log("index del : ", indexx);
+  }, []);
+
+  console.log("index out : ", indexx);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -132,10 +138,10 @@ const CreatePost = () => {
                       <div className="row">
                         <div className="col">
                           <Button
-                            className="btn btn-primary text-white fw-bolder btn-block"
+                            className="btn btn-warning text-white fw-bolder btn-block"
                             type="submit"
                           >
-                            POST
+                            UPDATE
                           </Button>
                         </div>
                       </div>
@@ -151,4 +157,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default EditPost;

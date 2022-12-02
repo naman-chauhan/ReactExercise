@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import "./HomePage.css";
 import Post from "../Post/Post";
 
@@ -8,7 +8,7 @@ import { Col, Row, Container, Card, Form } from "react-bootstrap-v5";
 const HomePage = () => {
   const nav = useNavigate();
 
-  const [postdata, setPostData] = useState();
+  const [postdata, setPostData] = useState([{}]);
 
   useEffect(() => {
     if (localStorage.getItem("posts") === null) {
@@ -25,15 +25,13 @@ const HomePage = () => {
     }
   }, []);
 
-  const updatedPosts = useCallback(() => {
+  useEffect(() => {
     setPostData(() => {
       return JSON.parse(localStorage.getItem("posts"));
     });
   }, []);
 
-  useEffect(() => {
-    updatedPosts();
-  }, [updatedPosts]);
+  console.log("postdata", postdata);
 
   const createPost = () => {
     nav("/create");

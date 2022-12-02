@@ -8,6 +8,7 @@ const CreatePost = () => {
   const nav = useNavigate();
   const [value, setValue] = useState("");
   const [filevalue, setFileValue] = useState("");
+  const [filepreview, setFilePreview] = useState();
   const redirectHandler = () => {
     nav("/home");
   };
@@ -32,6 +33,7 @@ const CreatePost = () => {
   };
 
   const uploadHandler = (e) => {
+    setFilePreview(URL.createObjectURL(e.target.files[0]));
     const fr = new FileReader();
     fr.onloadend = () => setFileValue(fr.result);
     fr.readAsDataURL(e.target.files[0]);
@@ -89,6 +91,17 @@ const CreatePost = () => {
                         onChange={handleInputChange}
                       />
                     </Form.Group>
+
+                    <div className="container mt-3 position-sticky">
+                      <div className="row sticky-bottom">
+                        <div className="col-md-6 border border-primary p-1">
+                          <img src={filepreview} alt="noimage" height={50} width={50} />&nbsp;&nbsp;
+                          <h3 className="d-inline">Media 1</h3>&nbsp;&nbsp;
+                          <i className="fa fa-trash fa-2x text-danger"></i>
+                        </div>
+                        
+                      </div>
+                    </div>
 
                     <div className="container mt-3 position-sticky">
                       <div className="row sticky-bottom">

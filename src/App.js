@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-
+import "./messaging_init_in_sw";
 import HomePage from "./components/Home/HomePage";
 import CreatePost from "./components/Post/CreatePost";
 import Auth from "./components/Auth/Auth";
@@ -14,6 +14,8 @@ function App() {
         <Route path="/" element={<Auth />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/create" element={<CreatePost />} />
+      </Routes>
+      <Routes>
         <Route path="/edit" element={<EditPost />} />
       </Routes>
     </BrowserRouter>
