@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 // import { useIsFocused } from "@react-navigation/native";
 import "./HomePage.css";
 import Post from "../Post/Post";
-
 import { useNavigate } from "react-router-dom";
 import { Col, Row, Container, Card, Form } from "react-bootstrap-v5";
 
