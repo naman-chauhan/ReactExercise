@@ -3,12 +3,13 @@ import "../Home/HomePage.css";
 import "./CreatePost.css";
 import { useNavigate } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
+import FilePreview from "./FilePreview";
 
 const CreatePost = () => {
   const nav = useNavigate();
   const [value, setValue] = useState("");
-  const [filevalue, setFileValue] = useState("");
-  const [filepreview, setFilePreview] = useState();
+  const [filevalue, setFileValue] = useState([]);
+  const [filepreviews, setFilePreviews] = useState([]);
   var cnt = 0;
   const redirectHandler = () => {
     nav("/home");
@@ -34,9 +35,9 @@ const CreatePost = () => {
   };
 
   const uploadHandler = (e) => {
-    setFilePreview(URL.createObjectURL(e.target.files[cnt++]));
+    setFilePreviews(URL.createObjectURL(e.target.files[cnt++]));
     const fr = new FileReader();
-    fr.onloadend = () => setFileValue(fr.result);
+    fr.onloadend = () => setFileValue((oldArray) => [...oldArray, fr.result]);
     fr.readAsDataURL(e.target.files[0]);
     console.log(e.target.files[0]);
   };
@@ -99,20 +100,9 @@ const CreatePost = () => {
                         display: filevalue ? "" : "none",
                       }}
                     >
-                      <div className="row sticky-bottom">
-                        <div className="col-md-6 border border-primary p-1">
-                          <img
-                            src={filepreview}
-                            alt="noimage"
-                            height={50}
-                            multiple
-                            width={50}
-                          />
-                          &nbsp;&nbsp;
-                          <h3 className="d-inline">Media 1</h3>&nbsp;&nbsp;
-                          <i className="fa fa-trash fa-2x text-danger"></i>
-                        </div>
-                      </div>
+                      {/* {filepreviews.map((filepre) => (
+                      ))} */}
+                      <FilePreview filepreview={filepreviews} />
                     </div>
 
                     <div className="container mt-3 position-sticky">

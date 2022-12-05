@@ -57,7 +57,17 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
             <div className="p-2">
               <p className="text-justify">{title.title}.</p>
             </div>
-            <img src={title.filevalue} alt="img" height="auto" width="100" />
+            if(title.filevalue)
+            {
+              <img
+                src={title.filevalue[0]}
+                // src={title.filevalue ? title.filevalue[0] : ""}
+                alt="img"
+                height="auto"
+                width="100"
+              />
+            }
+            else{alert("no image")}
             <hr />
             <div className="d-flex justify-content-between align-items-center">
               <div className="border-right-2">
