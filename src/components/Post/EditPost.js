@@ -4,14 +4,15 @@ import "../Home/HomePage.css";
 import "./CreatePost.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
+import { map } from "@firebase/util";
 
 const EditPost = () => {
   const nav = useNavigate();
+  const [post, setPost] = useState("");
   const [value, setValue] = useState("");
   const [filevalue, setFileValue] = useState("");
   const location = useLocation();
   const index = location.state.id;
-
   const redirectHandler = () => {
     nav("/home");
   };
@@ -19,13 +20,12 @@ const EditPost = () => {
   //   const [posts, setPosts] = useState([{}]);
 
   useEffect(() => {
-    const oldPost = JSON.parse(localStorage.getItem("posts"));
-    setValue(() => {
-      return oldPost[index].title;
-    });
-    setFileValue(() => {
-      return oldPost[index].filevalue;
-    });
+    const posts = JSON.parse(localStorage.getItem("posts"));
+    setPost(posts[index]);
+    // setValue(() => {
+    //   return oldPost[index].title;
+    // });
+    // setFileValue((oldArray) => [...oldArray[index].filevalue]);
   }, []);
 
   console.log("index out : ", index);
@@ -38,8 +38,28 @@ const EditPost = () => {
     // console.log(posts);
   };
 
+  const renderImages = () => {
+    const postArr = post.filevalue;
+    console.log("post arr", postArr);
+    return (
+      <div className="container mt-3 position-sticky">
+        <div className="row sticky-bottom">
+          <div className="col-md-6 border border-primary p-1">
+          {postArr.map((img, index) => (
+            <img src={img} alt="noimage" height={50} width={50} />
+            &nbsp;
+            <h3 className="d-inline">Media {index}</h3>&nbsp;&nbsp;
+            <i className="fa fa-trash fa-2x text-danger"></i>}
+          </div>
+        </div>
+      </div>
+    ));
+  };
+
+  // const removeImg
+
   const handleInputChange = (e) => {
-    setValue(e.target.value);
+    setPost(e.target.value);
   };
 
   const uploadHandler = (e) => {
@@ -58,8 +78,10 @@ const EditPost = () => {
     // console.log("old and new post here ", oldPost, newPosts);
     nav("/home");
   };
+
   return (
     <div>
+      {console.log("filevalue : ", filevalue)}
       <Container className="vh-100">
         <Row className="vh-100 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12} className="p-4 vh-100">
@@ -90,28 +112,14 @@ const EditPost = () => {
                       <Form.Control
                         placeholder="What's on your mind?"
                         className="create-post border-remove scroll"
-                        value={value}
+                        value={post.title}
                         as="textarea"
                         rows={2}
                         onChange={handleInputChange}
                       />
                     </Form.Group>
 
-                    <div className="container mt-3 position-sticky">
-                      <div className="row sticky-bottom">
-                        <div className="col-md-6 border border-primary p-1">
-                          <img
-                            src={filevalue}
-                            alt="noimage"
-                            height={50}
-                            width={50}
-                          />
-                          &nbsp;&nbsp;
-                          <h3 className="d-inline">Media 1</h3>&nbsp;&nbsp;
-                          <i className="fa fa-trash fa-2x text-danger"></i>
-                        </div>
-                      </div>
-                    </div>
+                    <renderImages />
 
                     <div className="container mt-3 position-sticky">
                       <div className="row sticky-bottom">
@@ -151,7 +159,6 @@ const EditPost = () => {
                         </Form.Group>
                       </div>
                     </div>
-
                     <div className="container mt-3">
                       <div className="row">
                         <div className="col">

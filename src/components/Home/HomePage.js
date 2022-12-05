@@ -46,8 +46,8 @@ const HomePage = () => {
             <Card>
               <Card.Body>
                 <div className="card sticky-top border-left-4 border-primary">
-                  <h1 className="font-weight-bold">
-                    Techdsf
+                  <h1 className="display-2 font-weight-bold">
+                    Tech
                     <sub className="display-2 font-weight-bold text-primary bold">
                       X
                     </sub>
