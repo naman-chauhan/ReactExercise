@@ -17,8 +17,9 @@ const HomePage = () => {
         JSON.stringify([
           {
             title: "!!..Create Your Post First..!!",
-            filevalue:
+            filevalue: [
               "https://www.ncenet.com/wp-content/uploads/2020/04/no-image-png-2.png",
+            ],
           },
         ])
       );
@@ -45,9 +46,12 @@ const HomePage = () => {
             <Card>
               <Card.Body>
                 <div className="card sticky-top border-left-4 border-primary">
-                  <h2 className="display-4">
-                    Tech <sub className="display-2 text-primary bold">X</sub>
-                  </h2>
+                  <h1 className="font-weight-bold">
+                    Techdsf
+                    <sub className="display-2 font-weight-bold text-primary bold">
+                      X
+                    </sub>
+                  </h1>
                   <div className="mb-3">
                     <Form>
                       <Form.Group className="m-3" controlId="formBasicEmail">

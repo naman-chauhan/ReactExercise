@@ -3,7 +3,7 @@ import React from "react";
 const FilePreview = ({ filepreview }) => {
   var cnt = 0;
   return (
-    <div className="row sticky-bottom p-1">
+    <div className="row sticky-bottom">
       <div className="col-md-6 border border-primary p-1">
         <img src={filepreview} alt="noimage" height={50} width={50} />
         &nbsp;&nbsp;

@@ -26,6 +26,37 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
     console.log("index in postItem : ", indexdel);
   };
 
+  const IsFileValue = (post) => {
+    console.log("post item cpm : ", post);
+    if (post.filevalue) {
+      const fileMul = post.filevalue;
+      return (
+        <div className="col">
+          {/* console.log("file mul 1: ", fileVal); */}
+          {fileMul.map((fileVal, index) => {
+            return (
+              <img
+                className="p-1 img-rounded"
+                style={{ borderRadius: "5px!important" }}
+                src={title.filevalue[index]}
+                // src={title.filevalue ? title.filevalue[0] : ""}
+                alt="img"
+                height={90}
+                width={150}
+              />
+            );
+          })}
+        </div>
+      );
+    } else {
+      return (
+        <>
+          <img src="https://www.ncenet.com/wp-content/uploads/2020/04/no-image-png-2.png" />
+        </>
+      );
+    }
+  };
+
   return (
     <div>
       <div className="container-fluid pd-5">
@@ -57,17 +88,9 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
             <div className="p-2">
               <p className="text-justify">{title.title}.</p>
             </div>
-            if(title.filevalue)
-            {
-              <img
-                src={title.filevalue[0]}
-                // src={title.filevalue ? title.filevalue[0] : ""}
-                alt="img"
-                height="auto"
-                width="100"
-              />
-            }
-            else{alert("no image")}
+            <div className="cotainer">
+              <div className="row">{IsFileValue(title)}</div>
+            </div>
             <hr />
             <div className="d-flex justify-content-between align-items-center">
               <div className="border-right-2">
