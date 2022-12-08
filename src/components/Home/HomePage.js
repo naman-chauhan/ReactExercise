@@ -36,7 +36,11 @@ const HomePage = () => {
   console.log("postdata", postdata);
 
   const createPost = () => {
-    nav("/create");
+    nav("/create", { state: { id: null, allowEdit: true } });
+  };
+
+  const redirectHandler = () => {
+    nav("/profile");
   };
   return (
     <div>
@@ -83,7 +87,11 @@ const HomePage = () => {
                       <i className="fa fa-home fa-3x " aria-hidden="true"></i>
                     </div>
                     <div className="col btn btn-lg">
-                      <i className="fa fa-user fa-3x" aria-hidden="true"></i>
+                      <i
+                        className="fa fa-user fa-3x"
+                        aria-hidden="true"
+                        onClick={redirectHandler}
+                      ></i>
                     </div>
                   </div>
                 </div>

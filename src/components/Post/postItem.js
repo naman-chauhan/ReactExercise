@@ -11,6 +11,7 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
   // }, []);
 
   function deletePost(e) {
+    e.stopPropagation();
     const items = JSON.parse(localStorage.getItem("posts"));
     const deletedPost = [...items];
     console.log("deletedPost : ", deletedPost);
@@ -20,14 +21,18 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
       return JSON.parse(localStorage.getItem("posts"));
     });
   }
+  const viewPost = () => {
+    nav("/create", { state: { id: indexdel, allowEdit: false } });
+  };
 
-  const editPost = () => {
-    nav("/edit", { state: { id: indexdel } });
+  const editPost = (e) => {
+    e.stopPropagation();
+    nav("/create", { state: { id: indexdel, allowEdit: true } });
     console.log("index in postItem : ", indexdel);
   };
 
   const IsFileValue = (post) => {
-    console.log("post item cpm : ", post);
+    console.log("post item log : ");
     if (post.filevalue) {
       const fileMul = post.filevalue;
       return (
@@ -58,7 +63,7 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
   };
 
   return (
-    <div>
+    <div onClick={viewPost}>
       <div className="container-fluid pd-5">
         <div className="row d-flex align-items-center justify-content-center">
           <div className="card">

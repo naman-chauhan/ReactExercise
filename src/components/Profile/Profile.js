@@ -1,0 +1,126 @@
+import React, { useState } from "react";
+import "../Home/HomePage.css";
+// import ToggleButton from "react-bootstrap/ToggleButton";
+import { useNavigate } from "react-router-dom";
+import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
+
+const Profile = () => {
+  var local = JSON.parse(localStorage.getItem("response") || "");
+  const nav = useNavigate();
+  const [value, setValue] = useState("");
+  const [filevalue, setFileValue] = useState([]);
+  const [filepreviews, setFilePreviews] = useState([]);
+  var cnt = 0;
+  const redirectHandler = () => {
+    nav("/home");
+  };
+
+  //   const [posts, setPosts] = useState([{}]);
+
+  //   useEffect(() => {
+  //     localStorage.setItem("posts", JSON.stringify(posts));
+  //     console.log("new note call:", posts);
+  //   }, [posts]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!value) return;
+    addPosts(value, filevalue);
+    setValue("");
+    // console.log(posts);
+  };
+
+  const handleInputChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  const uploadHandler = (e) => {
+    setFilePreviews(URL.createObjectURL(e.target.files[cnt++]));
+    const fr = new FileReader();
+    fr.onloadend = () => setFileValue((oldArray) => [...oldArray, fr.result]);
+    fr.readAsDataURL(e.target.files[0]);
+    console.log(e.target.files[0]);
+  };
+
+  const addPosts = (title, filevalue) => {
+    if (localStorage.getItem("posts") === null) {
+      localStorage.setItem("posts", JSON.stringify([{ title, filevalue }]));
+    } else {
+      const oldPost = JSON.parse(localStorage.getItem("posts"));
+      const newPosts = [...oldPost, { title, filevalue }];
+      localStorage.setItem("posts", JSON.stringify(newPosts));
+      console.log("old and new post here ", oldPost, newPosts);
+    }
+    nav("/home");
+  };
+
+  return (
+    <div>
+      <Container className="vh-100">
+        <Row className="vh-100 d-flex justify-content-center align-items-center">
+          <Col md={8} lg={6} xs={12} className="p-4 vh-100">
+            <Card>
+              <Card.Body>
+                <div className="border-left-4 border-primary">
+                  <div className="row">
+                    <div className="col-2 col-sm-2">
+                      <p>
+                        <i class="fa-solid fa-arrow-left fa-2x font-weight-bold"></i>
+                      </p>
+                    </div>
+                    <div className="col-5 col-sm-5">
+                      <h2 className="text-primary font-weght-bold float-start">
+                        Profile
+                      </h2>
+                    </div>
+                    <div className="col-5 col-sm-5">
+                      <p className="float-end">
+                        <i
+                          class="fa fa-window-close fa-2x"
+                          aria-hidden="true"
+                          onClick={redirectHandler}
+                        ></i>
+                      </p>
+                    </div>
+                  </div>
+
+                  <hr />
+
+                  <div className="container-fluid">
+                    <div className="row min-vh-40 d-flex justify-content-center align-items-center">
+                      <div className="col-6 d-flex justify-content-center align-items-center">
+                        <img
+                          src={local.imageUrl}
+                          width="50"
+                          alt="imag"
+                          className="rounded-circle"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Form onSubmit={handleSubmit}>
+                    <div className="container mt-3">
+                      <div className="row">
+                        <div className="col">
+                          <Button
+                            className="btn btn-primary text-white fw-bolder btn-block"
+                            type="submit"
+                          >
+                            Update Profile
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </Form>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+export default Profile;

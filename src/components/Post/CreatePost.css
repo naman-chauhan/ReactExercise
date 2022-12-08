@@ -49,3 +49,9 @@ input[type="file"] {
     cursor: pointer;
     box-shadow: none;
 }
+
+img {
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+}

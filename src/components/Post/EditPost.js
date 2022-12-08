@@ -10,7 +10,7 @@ const EditPost = () => {
   const nav = useNavigate();
   const [post, setPost] = useState("");
   const [value, setValue] = useState("");
-  const [filevalue, setFileValue] = useState("");
+  // const [filevalue, setFileValue] = useState("");
   const location = useLocation();
   const index = location.state.id;
   const redirectHandler = () => {
@@ -20,51 +20,79 @@ const EditPost = () => {
   //   const [posts, setPosts] = useState([{}]);
 
   useEffect(() => {
-    const posts = JSON.parse(localStorage.getItem("posts"));
-    setPost(posts[index]);
-    // setValue(() => {
-    //   return oldPost[index].title;
-    // });
+    const oldPost = JSON.parse(localStorage.getItem("posts"));
+    console.log("inside useEffect data is :", oldPost);
+    setPost(() => {
+      return oldPost[index];
+    });
+    setValue(() => {
+      return oldPost[index].title;
+    });
+    localStorage.setItem("posts", JSON.stringify(oldPost));
     // setFileValue((oldArray) => [...oldArray[index].filevalue]);
+    console.log("old post data : ", post);
   }, []);
-
-  console.log("index out : ", index);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!value) return;
-    EditPost(value, filevalue);
+    EditPost(value, post.filevalue);
     setValue("");
     // console.log(posts);
   };
 
+  const deletePostImg = (delIndex) => {
+    if (post) {
+      // post.filevalue.splice(delIndex, 1);
+      setPost((current) => {
+        current.filevalue.splice(delIndex, 1);
+        return current;
+      });
+      // localStorage.setItem("posts", JSON.stringify(post));
+    }
+
+    console.log("deleted post ", post);
+
+    // setPost((prevState) => prevState.filevalue.splice(delIndex, 1));
+  };
+
   const renderImages = () => {
-    const postArr = post.filevalue;
-    console.log("post arr", postArr);
-    return (
-      <div className="container mt-3 position-sticky">
-        <div className="row sticky-bottom">
-          <div className="col-md-6 border border-primary p-1">
-          {postArr.map((img, index) => (
-            <img src={img} alt="noimage" height={50} width={50} />
-            &nbsp;
-            <h3 className="d-inline">Media {index}</h3>&nbsp;&nbsp;
-            <i className="fa fa-trash fa-2x text-danger"></i>}
-          </div>
-        </div>
-      </div>
-    ));
+    console.log("render images working.. : ", post);
+    if (post) {
+      return (
+        <>
+          {post.filevalue.map((img, index) => (
+            <div className="col-md-12 border border-primary rounded p-3 m-2 d-flex justify-content-between">
+              <img
+                className="rounded"
+                src={img}
+                alt="noimage"
+                height={50}
+                width={50}
+              />
+              <h3 className="d-inline">Media {index}</h3>
+              <i
+                className="fa fa-times fa-2x text-danger"
+                style={{ cursor: "pointer" }}
+                onClick={() => deletePostImg(index)}
+              ></i>
+            </div>
+          ))}
+        </>
+      );
+    }
   };
 
   // const removeImg
 
   const handleInputChange = (e) => {
-    setPost(e.target.value);
+    setValue(e.target.value);
   };
 
   const uploadHandler = (e) => {
     const fr = new FileReader();
-    fr.onloadend = () => setFileValue(fr.result);
+    fr.onloadend = () =>
+      setPost((prevState) => (prevState.filevalue = fr.result));
     fr.readAsDataURL(e.target.files[0]);
     console.log(e.target.files[0]);
   };
@@ -81,8 +109,7 @@ const EditPost = () => {
 
   return (
     <div>
-      {console.log("filevalue : ", filevalue)}
-      <Container className="vh-100">
+      <Container className="vh-150">
         <Row className="vh-100 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12} className="p-4 vh-100">
             <Card>
@@ -112,14 +139,17 @@ const EditPost = () => {
                       <Form.Control
                         placeholder="What's on your mind?"
                         className="create-post border-remove scroll"
-                        value={post.title}
+                        value={value}
                         as="textarea"
                         rows={2}
                         onChange={handleInputChange}
                       />
                     </Form.Group>
-
-                    <renderImages />
+                    <div className="container mt-3 position-sticky">
+                      <div className="row d-flex flex-column justify-content-center align-items-center sticky-bottom">
+                        {renderImages()}
+                      </div>
+                    </div>
 
                     <div className="container mt-3 position-sticky">
                       <div className="row sticky-bottom">
