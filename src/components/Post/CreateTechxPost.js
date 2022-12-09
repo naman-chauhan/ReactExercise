@@ -7,6 +7,7 @@ import FilePreview from "./FilePreview";
 const CreateTechxPost = () => {
   var local = JSON.parse(localStorage.getItem("response") || "");
   const nav = useNavigate();
+  var count = 0;
   const [value, setValue] = useState("");
   const [view, setView] = useState("");
   const [post, setPost] = useState("");
@@ -16,7 +17,6 @@ const CreateTechxPost = () => {
   //   let IsCreate = location.state.allowEdit;
   const [filevalue, setFileValue] = useState([]);
   const [filepreviews, setFilePreviews] = useState([]);
-  var cnt = 0;
   const redirectHandler = () => {
     console.log("IsEdit : ", IsEdit);
     nav("/home");
@@ -35,6 +35,7 @@ const CreateTechxPost = () => {
         return oldPost ? oldPost[IsEdit.id].title : "";
       });
     }
+    console.log("filevalue : ", filevalue);
   }, []);
 
   //   const [posts, setPosts] = useState([{}]);
@@ -55,7 +56,7 @@ const CreateTechxPost = () => {
   const handleSubmitEdit = (e) => {
     e.preventDefault();
     if (!value) return;
-    EditPost(value, post.filevalue);
+    EditPost(value, filevalue);
     setValue("");
     console.log("post value : ", post);
   };
@@ -121,12 +122,25 @@ const CreateTechxPost = () => {
     setValueAdd(e.target.value);
   };
 
-  const uploadHandlerAdd = (e) => {
+  const uploadHandlerAdd = async (e) => {
     setFilePreviews(URL.createObjectURL(e.target.files[0]));
-    const fr = new FileReader();
-    fr.onloadend = () => setFileValue((oldArray) => [...oldArray, fr.result]);
-    fr.readAsDataURL(e.target.files[cnt++]);
-    console.log("file value in uploadhander Add : ", filevalue);
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
+    setFileValue((prevState) => [...prevState, base64]);
+    console.log("file value of upload handler : ", filevalue);
+  };
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
   };
 
   // const uploadHandlerEdit = (e) => {
@@ -219,7 +233,7 @@ const CreateTechxPost = () => {
                       <div
                         className="container mt-3 position-sticky"
                         style={{
-                          display: filevalue ? "" : "none",
+                          display: filevalue ? "none" : "",
                         }}
                       >
                         <FilePreview filepreview={filepreviews} />
@@ -329,6 +343,14 @@ const CreateTechxPost = () => {
                           {renderImages()}
                         </div>
                       </div>
+                      <div
+                        className="container mt-3 position-sticky"
+                        style={{
+                          display: filevalue ? "" : "none",
+                        }}
+                      >
+                        <FilePreview filepreview={filepreviews} />
+                      </div>
 
                       <div className="container mt-3 position-sticky">
                         <div className="row sticky-bottom">
@@ -345,7 +367,7 @@ const CreateTechxPost = () => {
                               id="file-upload"
                               className="col btn"
                               type="file"
-                              onChange={uploadHandlerEdit}
+                              onChange={uploadHandlerAdd}
                             />
                           </Form.Group>
                           <Form.Group className="col-md-6 btn p-1">
@@ -363,7 +385,7 @@ const CreateTechxPost = () => {
                               type="file"
                               accept="image/*"
                               capture="environment"
-                              onChange={uploadHandlerEdit}
+                              onChange={uploadHandlerAdd}
                             />
                           </Form.Group>
                         </div>
