@@ -92,7 +92,7 @@ const EditPost = () => {
   const uploadHandler = (e) => {
     const fr = new FileReader();
     fr.onloadend = () =>
-      setPost((prevState) => (prevState.filevalue = fr.result));
+    setPost((prevState) => (prevState.filevalue = fr.result));
     fr.readAsDataURL(e.target.files[0]);
     console.log(e.target.files[0]);
   };

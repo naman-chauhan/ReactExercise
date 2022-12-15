@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import Webcam from "react-webcam/dist/react-webcam";
 import "./CreatePost.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap-v5";
@@ -6,8 +7,8 @@ import FilePreview from "./FilePreview";
 
 const CreateTechxPost = () => {
   var local = JSON.parse(localStorage.getItem("response") || "");
+  var isWebCam = false;
   const nav = useNavigate();
-  var count = 0;
   const [value, setValue] = useState("");
   const [view, setView] = useState("");
   const [post, setPost] = useState("");
@@ -15,15 +16,34 @@ const CreateTechxPost = () => {
   const location = useLocation();
   let IsEdit = location.state;
   //   let IsCreate = location.state.allowEdit;
-  const [filevalue, setFileValue] = useState([]);
+  const [filevalues, setFileValues] = useState([]);
   const [filepreviews, setFilePreviews] = useState([]);
+  const [webPicture, setWebPicture] = useState("");
+  const WebcamComponent = () => <Webcam />;
+  const videoConstraints = {
+    width: 400,
+    height: 400,
+    facingMode: "user",
+  };
+  const webcamRef = useRef(null);
+  const capture = useCallback(() => {
+    const pictureSrc = webcamRef.current.getScreenshot();
+    setFileValues((prevState) => [...prevState, pictureSrc]);
+    nav("/create", { state: { id: null, allowEdit: true, isWebCam: false } });
+  });
+
   const redirectHandler = () => {
     console.log("IsEdit : ", IsEdit);
     nav("/home");
   };
 
+  const isToggleWeb = () => {
+    nav("/create", { state: { id: null, allowEdit: true, isWebCam: true } });
+    return 0;
+  };
+
+  const oldPost = JSON.parse(localStorage.getItem("posts"));
   useEffect(() => {
-    const oldPost = JSON.parse(localStorage.getItem("posts"));
     setView(() => {
       return oldPost[IsEdit.id];
     });
@@ -35,7 +55,12 @@ const CreateTechxPost = () => {
         return oldPost ? oldPost[IsEdit.id].title : "";
       });
     }
-    console.log("filevalue : ", filevalue);
+    if (IsEdit.id !== null && IsEdit.allowEdit === true) {
+      setFileValues(() => {
+        return oldPost ? oldPost[IsEdit.id].filevalue : "";
+      });
+    }
+    console.log("filevalue : ", filevalues);
   }, []);
 
   //   const [posts, setPosts] = useState([{}]);
@@ -48,7 +73,7 @@ const CreateTechxPost = () => {
   const handleSubmitAdd = (e) => {
     e.preventDefault();
     if (!valueAdd) return;
-    addPosts(valueAdd, filevalue);
+    addPosts(valueAdd, filevalues);
     setValueAdd("");
     // console.log(posts);
   };
@@ -56,17 +81,17 @@ const CreateTechxPost = () => {
   const handleSubmitEdit = (e) => {
     e.preventDefault();
     if (!value) return;
-    EditPost(value, filevalue);
+    EditPost(value, filevalues);
     setValue("");
     console.log("post value : ", post);
   };
 
   const renderImages = () => {
-    console.log("render images working.. : ", post);
-    if (post) {
+    console.log("render images working.. : ", filevalues);
+    if (filevalues) {
       return (
         <>
-          {post.filevalue.map((img, index) => (
+          {filevalues.map((img, index) => (
             <div className="col-md-12 border border-primary rounded p-3 m-2 d-flex justify-content-between">
               <img
                 className="rounded"
@@ -91,11 +116,10 @@ const CreateTechxPost = () => {
   const IsFileValue = (post) => {
     console.log("post item log : ");
     if (post) {
-      const fileMul = post.filevalue;
       return (
         <div className="col d-flex flex-column justify-content-center align-items-center">
           {/* console.log("file mul 1: ", fileVal); */}
-          {fileMul.map((fileVal, index) => {
+          {post.filevalue.map((fileVal, index) => {
             return (
               <img
                 className="p-1 img-rounded"
@@ -126,8 +150,8 @@ const CreateTechxPost = () => {
     setFilePreviews(URL.createObjectURL(e.target.files[0]));
     const file = e.target.files[0];
     const base64 = await convertToBase64(file);
-    setFileValue((prevState) => [...prevState, base64]);
-    console.log("file value of upload handler : ", filevalue);
+    setFileValues((prevState) => [...prevState, base64]);
+    console.log("file value of upload handler : ", filevalues);
   };
 
   const convertToBase64 = (file) => {
@@ -167,9 +191,10 @@ const CreateTechxPost = () => {
   const EditPost = (updatedTitle, updatedFileValue) => {
     const oldPost = JSON.parse(localStorage.getItem("posts"));
     oldPost[IsEdit.id].title = updatedTitle;
+    // const fileArr = [...updatedFileValue, ...updatedEditFileValue];
     oldPost[IsEdit.id].filevalue = updatedFileValue;
-    const newPost = [...oldPost];
-    localStorage.setItem("posts", JSON.stringify(newPost));
+    console.log("updatedFileValue : ", updatedFileValue);
+    localStorage.setItem("posts", JSON.stringify(oldPost));
     // console.log("old and new post here ", oldPost, newPosts);
     nav("/home");
   };
@@ -179,14 +204,13 @@ const CreateTechxPost = () => {
   };
 
   const deletePostImg = (delIndex) => {
-    if (post) {
-      // post.filevalue.splice(delIndex, 1);
-      setPost((current) => {
-        current.filevalue.splice(delIndex, 1);
-        return current;
-      });
-      // localStorage.setItem("posts", JSON.stringify(post));
-    }
+    const deletedPost = [...oldPost];
+    deletedPost[IsEdit.id].filevalue.splice(delIndex, 1);
+    localStorage.setItem("posts", JSON.stringify(deletedPost));
+    setFileValues(() => {
+      return deletedPost[IsEdit.id].filevalue;
+    });
+    console.log("delIndex : ", delIndex);
   };
 
   if (IsEdit.id === null && IsEdit.allowEdit === true) {
@@ -219,21 +243,62 @@ const CreateTechxPost = () => {
 
                     <Form onSubmit={handleSubmitAdd}>
                       <Form.Group controlId="formBasicEmail">
-                        <Form.Control
-                          placeholder="What's on your mind?"
-                          className="create-post border-remove scroll"
-                          value={valueAdd ? valueAdd : ""}
-                          as="textarea"
-                          autoFocus
-                          rows={2}
-                          onChange={handleInputChangeAdd}
-                        />
+                        {IsEdit.isWebCam === false ? (
+                          <Form.Control
+                            placeholder="What's on your mind?"
+                            className="create-post border-remove scroll"
+                            value={valueAdd ? valueAdd : ""}
+                            as="textarea"
+                            autoFocus
+                            rows={2}
+                            onChange={handleInputChangeAdd}
+                          />
+                        ) : (
+                          <Container>
+                            <Row>
+                              <Webcam
+                                audio={false}
+                                class="col-sm-12"
+                                height={400}
+                                ref={webcamRef}
+                                width={450}
+                                screenshotFormat="image/jpeg"
+                                videoConstraints={videoConstraints}
+                              />
+                              <Col
+                                sm={12}
+                                className="p-2 d-flex justify-content-around align-items-center"
+                              >
+                                <Button
+                                  className="text-success bg-white border border-success border-3 rounded font-weight-bold"
+                                  onClick={capture}
+                                >
+                                  Send
+                                </Button>
+                                <Button
+                                  className="text-danger bg-white border border-danger border-3 rounded font-weight-bold"
+                                  onClick={() => {
+                                    nav("/create", {
+                                      state: {
+                                        id: null,
+                                        allowEdit: true,
+                                        isWebCam: false,
+                                      },
+                                    });
+                                  }}
+                                >
+                                  Cancel
+                                </Button>
+                              </Col>
+                            </Row>
+                          </Container>
+                        )}
                       </Form.Group>
 
                       <div
-                        className="container mt-3 position-sticky"
+                        className="container mt-3 .-sticky"
                         style={{
-                          display: filevalue ? "none" : "",
+                          display: filepreviews.length === 0 ? "none" : "",
                         }}
                       >
                         <FilePreview filepreview={filepreviews} />
@@ -254,25 +319,25 @@ const CreateTechxPost = () => {
                               id="file-upload"
                               className="col btn"
                               type="file"
+                              // disabled={file.length === 3}
                               onChange={uploadHandlerAdd}
                             />
                           </Form.Group>
                           <Form.Group className="col-md-6 btn p-1">
                             <label
-                              htmlFor="file-upload"
-                              class="h-100 w-100 fa fa-camera fa-2x custom-file-upload btn text-primary  border border-primary border-3 rounded"
+                              htmlFor="file-upload-web"
+                              class="h-100 w-100 fa fa-image fa-2x custom-file-upload btn text-primary  border border-primary border-3 rounded font-weight-bold"
                             >
                               <br />
                               <br />
                               Camera
                             </label>
                             <Form.Control
-                              id="file-upload"
-                              className="col btn border border-danger border-3 "
-                              type="file"
-                              accept="image/*"
-                              capture="environment"
-                              onChange={uploadHandlerAdd}
+                              id="file-upload-web"
+                              className="col btn"
+                              type="button"
+                              // disabled={file.length === 3}
+                              onClick={isToggleWeb}
                             />
                           </Form.Group>
                         </div>
@@ -342,14 +407,6 @@ const CreateTechxPost = () => {
                         <div className="row d-flex flex-column justify-content-center align-items-center sticky-bottom">
                           {renderImages()}
                         </div>
-                      </div>
-                      <div
-                        className="container mt-3 position-sticky"
-                        style={{
-                          display: filevalue ? "" : "none",
-                        }}
-                      >
-                        <FilePreview filepreview={filepreviews} />
                       </div>
 
                       <div className="container mt-3 position-sticky">

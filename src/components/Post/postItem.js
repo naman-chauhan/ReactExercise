@@ -4,7 +4,7 @@ import "./CreatePost.css";
 import { Button } from "react-bootstrap-v5";
 
 const PostItem = ({ title, indexdel, setPostDataItem }) => {
-  var local = JSON.parse(localStorage.getItem("response") || "");
+  var local = JSON.parse(localStorage.getItem("response"));
   const nav = useNavigate();
   // useEffect(() => {
 
@@ -32,22 +32,23 @@ const PostItem = ({ title, indexdel, setPostDataItem }) => {
   };
 
   const IsFileValue = (post) => {
-    console.log("post item log : ");
+    console.log("post item log : ", post);
     if (post.filevalue) {
-      const fileMul = post.filevalue;
       return (
         <div className="col">
           {/* console.log("file mul 1: ", fileVal); */}
-          {fileMul.map((fileVal, index) => {
+          {post.filevalue.map((fileVal, index) => {
             return (
               <img
                 className="p-1 img-rounded"
-                style={{ borderRadius: "5px!important" }}
+                style={{
+                  borderRadius: "5px!important",
+                }}
                 src={title.filevalue[index]}
                 // src={title.filevalue ? title.filevalue[0] : ""}
                 alt="img"
                 height={90}
-                width={150}
+                width={100}
               />
             );
           })}

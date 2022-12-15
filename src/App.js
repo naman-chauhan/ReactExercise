@@ -8,6 +8,7 @@ import ViewPost from "./components/Post/ViewPost";
 import Profile from "./components/Profile/Profile";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CreateTechxPost from "./components/Post/CreateTechxPost";
+import WebFileUpload from "./components/Post/WebFileUpload";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/create" element={<CreateTechxPost />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/view" element={<ViewPost />} />
+        <Route path="/WebFileUpload" element={<WebFileUpload />} />
       </Routes>
     </BrowserRouter>
   );

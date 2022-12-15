@@ -41,6 +41,10 @@ input[type="file"] {
     display: none;
 }
 
+input[type="button"] {
+    display: none;
+}
+
 .custom-file-upload {
     border: 1px solid #ccc;
     font-size: 1.5em;

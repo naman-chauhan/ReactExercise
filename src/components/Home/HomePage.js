@@ -36,7 +36,7 @@ const HomePage = () => {
   console.log("postdata", postdata);
 
   const createPost = () => {
-    nav("/create", { state: { id: null, allowEdit: true } });
+    nav("/create", { state: { id: null, allowEdit: true, isWebCam: false } });
   };
 
   const redirectHandler = () => {
